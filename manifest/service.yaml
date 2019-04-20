@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: database
+  name: rest
+spec:
+  selector:
+    app: database-rest
+  type: NodePort
+  #type: ClusterIP
+  ports:
+    - name: rest
+      port: 8888
+      targetPort: 8888
+      nodePort: 9097
+      protocol: TCP

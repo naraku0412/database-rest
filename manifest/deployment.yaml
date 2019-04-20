@@ -1,0 +1,58 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  labels:
+    app: database-rest
+  name: database-rest
+  namespace: database
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: database-rest
+    spec:
+      containers:
+        #maven
+        - name: maven
+          image: gmt.reg.me/frame/maven-rest:v1
+          command:
+            - /bin/sh
+          args:
+            - /workspace/pack.sh
+          volumeMounts:
+            - name: database-rest-pack
+              mountPath: /workspace/pack.sh
+              subPath: pack.sh
+              readOnly: true
+            - name: share-jar
+              mountPath: /workspace
+        #redis
+        - name: redis1
+          image: redis:5
+          imagePullPolicy: IfNotPresent
+        #server
+        - name: server
+          image: gmt.reg.me/frame/jn-rest:v1
+          command:
+            - node
+          args:
+            - /workspace/server.js
+          volumeMounts:
+            - name: database-rest-server
+              mountPath: /workspace/server.js
+              subPath: server.js
+              readOnly: true
+            - name: share-jar
+              mountPath: /workspace
+      volumes:
+        - name: database-rest-server
+          configMap:
+            name: database-rest-server
+            defaultMode: 0755
+        - name: database-rest-pack
+          configMap:
+            name: database-rest-pack
+            defaultMode: 0755
+        - name: share-jar
+          emptyDir: {}

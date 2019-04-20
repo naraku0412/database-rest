@@ -1,0 +1,6 @@
+FROM gmt.reg.me/test/maven-dependency:v1
+ADD ./scripts/AppBatSet.java /project/src/main/java/com/app/
+ADD ./scripts/AppGet.java /project/src/main/java/com/app/
+ADD ./scripts/GetRealtimeYCData.java  /project/src/main/java/com/app/
+ADD ./scripts/AppHisBatSet.java  /project/src/main/java/com/app/
+ADD ./scripts/GetDayYCData.java  /project/src/main/java/com/app/
