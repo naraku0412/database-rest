@@ -79,3 +79,37 @@ app.post('/api/snap/GetDayYCData',function(req,res){
             res.send(stdout);}
        });
 });
+app.post('/api/snap/GetPeroidVarNum',function(req,res){
+         var body = req.body;
+         var key = JSON.stringify(body);
+         console.log("key:");
+         console.log(key);
+         callfile.execFile('/execfile/GetPeroidVarNum.sh',['-k',key],null,function (error, stdout, stderr) {
+            if(error){
+            console.log(error);
+            res.send(error);
+            }else if(stderr){
+            console.log(stderr);
+            res.send(stderr);
+            }else if(stdout){
+            console.log(stdout);
+            res.send(stdout);}
+       });
+});
+app.post('/api/snap/GetPeriodYCData',function(req,res){
+         var body = req.body;
+         var key = JSON.stringify(body);
+         console.log("key:");
+         console.log(key);
+         callfile.execFile('/execfile/GetPeriodYCData.sh',['-k',key],null,function (error, stdout, stderr) {
+            if(error){
+            console.log(error);
+            res.send(error);
+            }else if(stderr){
+            console.log(stderr);
+            res.send(stderr);
+            }else if(stdout){
+            console.log(stdout);
+            res.send(stdout);}
+       });
+});

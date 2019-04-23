@@ -10,8 +10,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;  
 import com.alibaba.fastjson.JSONArray;  
 import com.alibaba.fastjson.serializer.SerializerFeature; 
-import com.alibaba.fastjson.TypeReference;
-import com.alibaba.fastjson.parser.Feature; 
 
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.BasicParser;
@@ -23,12 +21,12 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-public class GetPeriodYCData
+public class GetPeroidVarNum
 {
-     private static final Logger logger = Logger.getLogger(GetPeriodYCData.class);
+     private static final Logger logger = Logger.getLogger(GetPeroidVarNum.class);
      static {
               Logger rootLogger = Logger.getRootLogger();
-              rootLogger.setLevel(Level.WARN);
+              rootLogger.setLevel(Level.INFO);
               rootLogger.addAppender(new ConsoleAppender(new PatternLayout("%-6r [%p] %c - %m%n")));
      }
 
@@ -48,66 +46,38 @@ public class GetPeriodYCData
      if( commandLine.hasOption('i') ) {
          ipInput = commandLine.getOptionValue('i');
      }
-     //输入json数据解析
      JSONObject keyInputObj = JSON.parseObject(keyInput);//字符串转为json结构体  
      List<Integer> integers = JSON.parseArray(keyInputObj.getJSONArray("pIDs").toJSONString(),Integer.class);//解析pid
      List<String> strings = JSON.parseArray(keyInputObj.getJSONArray("name").toJSONString(),String.class);//解析name
      int timeStart = keyInputObj.getIntValue("timetag0");//整型时间戳解析
      int timeEnd = keyInputObj.getIntValue("timetag1");//整型时间戳解析
+       
      int dataLength = strings.size();//数据点长度
      logger.info("The dataLength is:" + dataLength);
      Jedis jedis = new Jedis(ipInput);
-     List<Integer> sTimetag=new ArrayList();//用于存放符合条件的timetag
-     List<String> sKey = new ArrayList();//用于存放符合条件的key;
-     List<String> sNamePre = new ArrayList();//用于存放符合条件的name前缀;
+     long[] Num = new long[dataLength];//长整型数组用于存放结果
      for(int i=0;i<dataLength;i++){
       int nameId = integers.get(i);
       String nameIdStr = Integer.toString(nameId);
-       logger.info("The name of timetag list is:" + (strings.get(i)+"_"+nameIdStr));
-       List<String> listkey = jedis.lrange((strings.get(i)+"_"+nameIdStr),0,-1);//取出nameId对应的timetag
+       logger.info("The time list of name is:" + (strings.get(i)+"_"+nameIdStr));
+       List<String> listkey = jedis.lrange((strings.get(i)+"_"+nameIdStr),0,-1);
        logger.info("The timetag list is :" + listkey);
-       logger.info("To determine the timetag list:" + !listkey.isEmpty()); 
-       if (!listkey.isEmpty()){
+       long j=0;
+       if (listkey.size() == 0){
+          Num[i]=j;
+       }else{
        for (int k=0;k<listkey.size();k++){
          int timeGet = Integer.parseInt(listkey.get(k));
-         logger.info("The get timetag is:" + timeGet);
-         logger.info("The get timetag is in the finding scope:" + ((timeGet>=timeStart)&&(timeGet<=timeEnd)));
-         logger.info("The time start is:" + timeStart);
-         logger.info("The time end is:" + timeEnd);
          if ((timeGet>=timeStart)&&(timeGet<=timeEnd)){
-          sKey.add(strings.get(i)+"_"+nameIdStr+"_"+listkey.get(k));
-          sTimetag.add(timeGet);
-          sNamePre.add(strings.get(i)+"_"+nameIdStr);
-          logger.info("The satisfied time list is :" + sTimetag);
-          logger.info("The satisfied key list is :" + sKey);
-          logger.info("The satisfied name pre is :" + sNamePre);
+          j++;
          }
-       }//end for
-      }//end if 
-     }//end for
-      //断面数据读取
-      JSONArray jsonArray1 = new JSONArray();//json数组
-      JSONObject getObj = new JSONObject(true);
-      JSONObject jsonObject2 = new JSONObject(true);
-      String js;
-      if(!sTimetag.isEmpty()){
-        String[] membersList = new String[sTimetag.size()];//用于存放数据中心的取出值
-        for(int i=0;i<sTimetag.size();i++){
-          membersList[i] = jedis.get(sKey.get(i));
-          JSONObject jsonObject1 = new JSONObject(true);
-          getObj = JSON.parseObject(membersList[i],Feature.OrderedField);
-          jsonObject1.put("name",sNamePre.get(i));
-          jsonObject1.put("value",getObj);
-          jsonArray1.add(i,jsonObject1); 
-        }//end for
-          jsonObject2.put("name","station1_YC");
-          jsonObject2.put("members",jsonArray1);
-          js = JSON.toJSONString(jsonObject2);
-      }else{
-        js = "{\"replyCode\":{\"code\": -1,\"message\":\"查询的表不存在\"},}";
+       }
+       Num[i]=j;
       }
+     }
       jedis.close();
-      String formatJs =  ForMatJSONStr.format(js);//格式化输出json
-      System.out.println(formatJs); 
+      String js = Arrays.toString(Num); 
+      System.out.println(js); 
    }
 }
+

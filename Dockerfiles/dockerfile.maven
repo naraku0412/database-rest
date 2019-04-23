@@ -4,3 +4,6 @@ ADD ./scripts/AppGet.java /project/src/main/java/com/app/
 ADD ./scripts/GetRealtimeYCData.java  /project/src/main/java/com/app/
 ADD ./scripts/AppHisBatSet.java  /project/src/main/java/com/app/
 ADD ./scripts/GetDayYCData.java  /project/src/main/java/com/app/
+ADD ./scripts/GetPeroidVarNum.java   /project/src/main/java/com/app/
+ADD ./scripts/GetPeriodYCData.java   /project/src/main/java/com/app/
+ADD ./scripts/ForMatJSONStr.java     /project/src/main/java/com/app/

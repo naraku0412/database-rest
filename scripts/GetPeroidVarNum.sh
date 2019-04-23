@@ -1,4 +1,5 @@
 #!/bin/sh
+
 while getopts ":k:v:" opt
 do
     case $opt in
@@ -9,5 +10,5 @@ do
 done
 
 
-java -cp /workspace/project.jar  com.app.GetPeriodYCData  -k $key
+java -cp /workspace/project.jar  com.app.GetPeroidVarNum  -k $key
 

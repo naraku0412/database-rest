@@ -75,6 +75,8 @@ public class AppHisBatSet
         jedis.lpush(list,keyInput);
         jedis.set(keyInput,valueInput);
         String keyPre = namePre + spid;//键的前缀
+        logger.info("The input keyPre is:" + keyPre);
+        logger.info("The input time is:" + time);
         jedis.lpush(keyPre,time);//将时间存储到键的前缀
         logger.info("The data is set in the database!");
     }

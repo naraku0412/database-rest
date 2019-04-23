@@ -31,6 +31,10 @@ spec:
         - name: redis1
           image: redis:5
           imagePullPolicy: IfNotPresent
+        #cassandra
+        - name: cassandra1
+          image: cassandra:latest
+          imagePullPolicy: IfNotPresent
         #server
         - name: server
           image: gmt.reg.me/frame/jn-rest:v1

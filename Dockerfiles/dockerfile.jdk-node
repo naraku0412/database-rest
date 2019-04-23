@@ -1,4 +1,3 @@
 FROM gmt.reg.me/frame/jdk-node:v3
 RUN mkdir -p  /execfile
 ADD ./scripts/* /execfile/
-RUN npm install body-parser
