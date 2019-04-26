@@ -26,7 +26,7 @@ public class GetDayYCData
      private static final Logger logger = Logger.getLogger(GetDayYCData.class);
      static {
               Logger rootLogger = Logger.getRootLogger();
-              rootLogger.setLevel(Level.INFO);
+              rootLogger.setLevel(Level.WARN);
               rootLogger.addAppender(new ConsoleAppender(new PatternLayout("%-6r [%p] %c - %m%n")));
      }
 
@@ -72,7 +72,7 @@ public class GetDayYCData
       
       logger.info("The input getObj is:" + getObj);
       JSONObject jsonObject1 = new JSONObject();
-      jsonObject1.put("name",strings.get(i));
+      jsonObject1.put("name",integers.get(i));
       jsonObject1.put("value",getObj);
       jsonArray1.add(i,jsonObject1);
      }//获取数据

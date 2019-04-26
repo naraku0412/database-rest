@@ -26,14 +26,14 @@ public class GetPeroidVarNum
      private static final Logger logger = Logger.getLogger(GetPeroidVarNum.class);
      static {
               Logger rootLogger = Logger.getRootLogger();
-              rootLogger.setLevel(Level.INFO);
+              rootLogger.setLevel(Level.WARN);
               rootLogger.addAppender(new ConsoleAppender(new PatternLayout("%-6r [%p] %c - %m%n")));
      }
 
    public static void main(String args[]) throws Exception {
      
      CommandLineParser parser = new BasicParser( );
-     String keyInput  = "{\"timetag0\":123,\"timetag1\":1111,\"pIDs\":[1,2,3,4],\"n\":4,\"name\":[\"station1_YC\",\"station1_YC\",\"station1_YC\",\"station1_YC\"]}";
+     String keyInput  = "{\"timetag0\":123,\"timetag1\":1111,\"pIDs\":[1,2,3,4],\"n\":4,\"name\":[\"station1_YC_1\",\"station1_YC_2\",\"station1_YC_3\",\"station1_YC_4\"]}";
      String ipInput = "127.0.0.1";
      Options options = new Options();
      options.addOption("k","keyInput", true, "The input key");
@@ -59,8 +59,8 @@ public class GetPeroidVarNum
      for(int i=0;i<dataLength;i++){
       int nameId = integers.get(i);
       String nameIdStr = Integer.toString(nameId);
-       logger.info("The time list of name is:" + (strings.get(i)+"_"+nameIdStr));
-       List<String> listkey = jedis.lrange((strings.get(i)+"_"+nameIdStr),0,-1);
+       logger.info("The time list of name is:" + (strings.get(i)+"_"+"t"));
+       List<String> listkey = jedis.lrange((strings.get(i)+"_"+"t"),0,-1);
        logger.info("The timetag list is :" + listkey);
        long j=0;
        if (listkey.size() == 0){

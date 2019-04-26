@@ -35,7 +35,7 @@ public class GetPeriodYCData
    public static void main(String args[]) throws Exception {
      
      CommandLineParser parser = new BasicParser( );
-     String keyInput  = "{\"timetag0\":123,\"timetag1\":1111,\"pIDs\":[1,2,3,4],\"n\":4,\"name\":[\"station1_YC\",\"station1_YC\",\"station1_YC\",\"station1_YC\"]}";
+     String keyInput  = "{\"timetag0\":123,\"timetag1\":1111,\"pIDs\":[1,2,3,4],\"n\":4,\"name\":[\"station1_YC_1\",\"station1_YC_2\",\"station1_YC_3\",\"station1_YC_4\"]}";
      String ipInput = "127.0.0.1";
      Options options = new Options();
      options.addOption("k","keyInput", true, "The input key");
@@ -59,12 +59,12 @@ public class GetPeriodYCData
      Jedis jedis = new Jedis(ipInput);
      List<Integer> sTimetag=new ArrayList();//用于存放符合条件的timetag
      List<String> sKey = new ArrayList();//用于存放符合条件的key;
-     List<String> sNamePre = new ArrayList();//用于存放符合条件的name前缀;
+     List<Integer> sNamePre = new ArrayList();//用于存放符合条件的name前缀;
      for(int i=0;i<dataLength;i++){
       int nameId = integers.get(i);
       String nameIdStr = Integer.toString(nameId);
-       logger.info("The name of timetag list is:" + (strings.get(i)+"_"+nameIdStr));
-       List<String> listkey = jedis.lrange((strings.get(i)+"_"+nameIdStr),0,-1);//取出nameId对应的timetag
+       logger.info("The name of timetag list is:" + (strings.get(i)+"_"+"t"));
+       List<String> listkey = jedis.lrange((strings.get(i)+"_"+"t"),0,-1);//取出nameId对应的timetag
        logger.info("The timetag list is :" + listkey);
        logger.info("To determine the timetag list:" + !listkey.isEmpty()); 
        if (!listkey.isEmpty()){
@@ -75,9 +75,9 @@ public class GetPeriodYCData
          logger.info("The time start is:" + timeStart);
          logger.info("The time end is:" + timeEnd);
          if ((timeGet>=timeStart)&&(timeGet<=timeEnd)){
-          sKey.add(strings.get(i)+"_"+nameIdStr+"_"+listkey.get(k));
+          sKey.add(strings.get(i)+"_"+listkey.get(k));
           sTimetag.add(timeGet);
-          sNamePre.add(strings.get(i)+"_"+nameIdStr);
+          sNamePre.add(integers.get(i));
           logger.info("The satisfied time list is :" + sTimetag);
           logger.info("The satisfied key list is :" + sKey);
           logger.info("The satisfied name pre is :" + sNamePre);
@@ -96,7 +96,7 @@ public class GetPeriodYCData
           membersList[i] = jedis.get(sKey.get(i));
           JSONObject jsonObject1 = new JSONObject(true);
           getObj = JSON.parseObject(membersList[i],Feature.OrderedField);
-          jsonObject1.put("name",sNamePre.get(i));
+          jsonObject1.put("name", sNamePre.get(i));
           jsonObject1.put("value",getObj);
           jsonArray1.add(i,jsonObject1); 
         }//end for

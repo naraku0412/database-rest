@@ -26,7 +26,7 @@ public class GetRealtimeYCData
      private static final Logger logger = Logger.getLogger(GetRealtimeYCData.class);
      static {
               Logger rootLogger = Logger.getRootLogger();
-              rootLogger.setLevel(Level.INFO);
+              rootLogger.setLevel(Level.WARN);
               rootLogger.addAppender(new ConsoleAppender(new PatternLayout("%-6r [%p] %c - %m%n")));
      }
 
@@ -59,7 +59,7 @@ public class GetRealtimeYCData
      JSONObject jsonObject2 = new JSONObject();  
      JSONObject getObj = new JSONObject();
      for(int i=0;i<dataLength;i++){
-      membersList[i] = jedis.get(strings.get(i));
+      membersList[i] = jedis.get(strings.get(i));//这块得改一下
       logger.info("The finding key is:" + strings.get(i));
       logger.info("The member list is:" + membersList[i]);
       if (membersList[i]!=null){
@@ -70,7 +70,7 @@ public class GetRealtimeYCData
       
       logger.info("The input getObj is:" + getObj);
       JSONObject jsonObject1 = new JSONObject();
-      jsonObject1.put("name",strings.get(i));
+      jsonObject1.put("name",integers.get(i));
       jsonObject1.put("value",getObj);
       jsonArray1.add(i,jsonObject1);
      }//获取数据
