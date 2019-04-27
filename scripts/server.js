@@ -33,6 +33,25 @@ app.get('/', function (req, res) {
    res.send('Hello World');
 });
 
+app.post('/api/snap/setRealTime',function(req,res){
+         var body = req.body;
+         var key = JSON.stringify(body);
+         console.log("key:");
+         console.log(key);
+         callfile.execFile('/execfile/AppSetReal.sh',['-k',key],null,function (error, stdout, stderr) {
+            if(error){
+            console.log(error);
+            res.send(error);
+            }else if(stderr){
+            console.log(stderr);
+            res.send(stderr);
+            }else if(stdout){
+            console.log(stdout);
+            res.send(stdout);}
+       });
+});
+
+
 app.get('/api/snap/getModelDef',function(req,res){
          callfile.execFile('/workspace/modelget.sh',null,function (error, stdout, stderr) {
             console.log(stdout);

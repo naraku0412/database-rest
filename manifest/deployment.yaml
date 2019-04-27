@@ -38,6 +38,7 @@ spec:
         #server
         - name: server
           image: gmt.reg.me/frame/jn-rest:v1
+          imagePullPolicy: Always
           command:
             - node
           args:

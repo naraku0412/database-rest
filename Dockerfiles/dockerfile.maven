@@ -1,4 +1,4 @@
-FROM gmt.reg.me/test/maven-dependency:v1
+FROM gmt.reg.me/test/maven-dependency:v2
 ADD ./scripts/AppBatSet.java /project/src/main/java/com/app/
 ADD ./scripts/AppGet.java /project/src/main/java/com/app/
 ADD ./scripts/GetRealtimeYCData.java  /project/src/main/java/com/app/
@@ -7,3 +7,4 @@ ADD ./scripts/GetDayYCData.java  /project/src/main/java/com/app/
 ADD ./scripts/GetPeroidVarNum.java   /project/src/main/java/com/app/
 ADD ./scripts/GetPeriodYCData.java   /project/src/main/java/com/app/
 ADD ./scripts/ForMatJSONStr.java     /project/src/main/java/com/app/
+ADD ./scripts/AppSetHis.java          /project/src/main/java/com/app/
